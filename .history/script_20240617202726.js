@@ -31,60 +31,58 @@ function defaultData() {
 // Set parameters in the UI
 function setParam() {
   const data = readData('data');
-  console.log("Data read from localStorage:", data);
-
+  
   const air = document.getElementById('air-s');
   const hum = document.getElementById('hum-s');
   const tem = document.getElementById('tem-s');
 
   if (data) {
-    console.log("Updating UI elements");
     air.textContent = data.air.toFixed(2);
     hum.textContent = data.humidity;
     tem.textContent = data.temperature;
-  } else {
-    console.log("No data found in localStorage");
   }
 }
 
 // Add event listener for form submission
 document.getElementById('data-form').addEventListener('submit', (e) => {
   e.preventDefault();
-  console.log("Form submitted");
 
-  const humidityInput = e.target.querySelector('#humid-in').value;
-  const temperatureInput = e.target.querySelector('#temp-in').value;
-  const gravityInput = e.target.querySelector('#grav-in').value;
+  const humidityInput = e.target.querySelector('#humid-in');
+  const temperatureInput = e.target.querySelector('#temp-in');
+  const gravityInput = e.target.querySelector('#grav-in');
 
-  console.log("Form input values:", {
-    humidityInput,
-    temperatureInput,
-    gravityInput
-  });
+  const humidity = parseFloat(humidityInput.value);
+  const temperature = parseFloat(temperatureInput.value);
+  const gravity = parseFloat(gravityInput.value);
 
   const data = readData('data') || {};
 
-  // Handle input values and fallback to previous data or defaults
-  const humidity = humidityInput ? parseFloat(humidityInput) : data.humidity || 60;
-  const temperature = temperatureInput ? parseFloat(temperatureInput) : data.temperature || 25;
-  const gravity = gravityInput ? parseFloat(gravityInput) : data.gravity || 9.81;
+  if (!humidity) {
+    data.humidity = data.humidity || 60; // default to 60 if no previous data
+  } else {
+    data.humidity = humidity;
+  }
+  if (!temperature) {
+    data.temperature = data.temperature || 25; // default to 25 if no previous data
+  } else {
+    data.temperature = temperature;
+  }
+  if (!gravity) {
+    data.gravity = data.gravity || 9.81; // default to 9.81 if no previous data
+  } else {
+    data.gravity = gravity;
+  }
 
-  data.air = airDensity(temperature, humidity);
-  data.humidity = humidity;
-  data.temperature = temperature;
-  data.gravity = gravity;
-
-  console.log("Updated data to be stored:", data);
+  data.air = airDensity(data.temperature, data.humidity);
 
   setData('data', data);
-  setParam(); // Update the UI elements with new data
+  setParam();
 });
 
 // Add event listener for button click to submit form
-document.getElementById('submit-config').addEventListener('click', (e) => {
-  e.preventDefault(); // Prevent default button behavior
-  document.getElementById('data-form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-  console.log("Submitted via button click");
+document.getElementById('submit-config').addEventListener('click', () => {
+  document.getElementById('data-form').submit();
+  console.log("Submitted");
 });
 
 // Open and move configuration tab
@@ -118,23 +116,23 @@ document.addEventListener('DOMContentLoaded', () => {
       tabHeader.addEventListener("mousedown", (e) => {
         const shiftX = e.clientX - floatingTab.getBoundingClientRect().left;
         const shiftY = e.clientY - floatingTab.getBoundingClientRect().top;
-
+    
         function moveAt(pageX, pageY) {
           floatingTab.style.left = pageX - shiftX + 'px';
           floatingTab.style.top = pageY - shiftY + 'px';
         }
-
+    
         function onMouseMove(event) {
           moveAt(event.pageX, event.pageY);
         }
-
+    
         document.addEventListener("mousemove", onMouseMove);
-
+    
         document.addEventListener("mouseup", () => {
           document.removeEventListener("mousemove", onMouseMove);
         }, { once: true });
       });
-
+    
       tabHeader.addEventListener("dragstart", () => {
         return false;
       });

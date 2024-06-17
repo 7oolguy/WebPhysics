@@ -31,36 +31,25 @@ function defaultData() {
 // Set parameters in the UI
 function setParam() {
   const data = readData('data');
-  console.log("Data read from localStorage:", data);
 
   const air = document.getElementById('air-s');
   const hum = document.getElementById('hum-s');
   const tem = document.getElementById('tem-s');
 
   if (data) {
-    console.log("Updating UI elements");
     air.textContent = data.air.toFixed(2);
     hum.textContent = data.humidity;
     tem.textContent = data.temperature;
-  } else {
-    console.log("No data found in localStorage");
   }
 }
 
 // Add event listener for form submission
 document.getElementById('data-form').addEventListener('submit', (e) => {
   e.preventDefault();
-  console.log("Form submitted");
 
   const humidityInput = e.target.querySelector('#humid-in').value;
   const temperatureInput = e.target.querySelector('#temp-in').value;
   const gravityInput = e.target.querySelector('#grav-in').value;
-
-  console.log("Form input values:", {
-    humidityInput,
-    temperatureInput,
-    gravityInput
-  });
 
   const data = readData('data') || {};
 
@@ -74,17 +63,14 @@ document.getElementById('data-form').addEventListener('submit', (e) => {
   data.temperature = temperature;
   data.gravity = gravity;
 
-  console.log("Updated data to be stored:", data);
-
   setData('data', data);
-  setParam(); // Update the UI elements with new data
+  setParam();
 });
 
 // Add event listener for button click to submit form
-document.getElementById('submit-config').addEventListener('click', (e) => {
-  e.preventDefault(); // Prevent default button behavior
-  document.getElementById('data-form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-  console.log("Submitted via button click");
+document.getElementById('submit-config').addEventListener('click', () => {
+  document.getElementById('data-form').submit();
+  console.log("Submitted");
 });
 
 // Open and move configuration tab
@@ -118,23 +104,23 @@ document.addEventListener('DOMContentLoaded', () => {
       tabHeader.addEventListener("mousedown", (e) => {
         const shiftX = e.clientX - floatingTab.getBoundingClientRect().left;
         const shiftY = e.clientY - floatingTab.getBoundingClientRect().top;
-
+    
         function moveAt(pageX, pageY) {
           floatingTab.style.left = pageX - shiftX + 'px';
           floatingTab.style.top = pageY - shiftY + 'px';
         }
-
+    
         function onMouseMove(event) {
           moveAt(event.pageX, event.pageY);
         }
-
+    
         document.addEventListener("mousemove", onMouseMove);
-
+    
         document.addEventListener("mouseup", () => {
           document.removeEventListener("mousemove", onMouseMove);
         }, { once: true });
       });
-
+    
       tabHeader.addEventListener("dragstart", () => {
         return false;
       });

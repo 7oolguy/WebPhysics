@@ -12,24 +12,22 @@
       <h2>Configuration<span class="close-btn" id="closeBtn">&times;</span></h2>
     </div>
     <div class="tab-content">
+        <h3 id="atmosphere">Atmosphere</h3>
+        <div class="divider"></div>
         <section title="atmosphere">
-            <form id="data-form" action="">
-
-
-              <h3 id="atm">Atmosphere</h3>
-              <div class="divider"></div>
-
-              <label for="humid-in">Humidity:</label>
-              <input id="humid-in" title="humidity" step="any" type="number" placeholder="10">
-              <label for="temp-in">Temperature:</label>
-              <input id="temp-in" title="temperature" step="any" type="number" placeholder="20">
-              
-              
-              <h3 id="grav">Gravity</h3>
-              <div class="divider"></div>
-
-              <label for="grav-in">Acceleration:</label>
-              <input id="grav-in" title="acceleration" step="any" type="number" placeholder="9.81">
+            <form action="">
+                <label for="humidity">Humidity:</label>
+                <input title="humidity" step="any" type="number" placeholder="10">
+                <label for="temperature">Temperature:</label>
+                <input title="temperature" step="any" type="number" placeholder="20">
+            </form>
+        </section>
+        <h3 id="atmosphere">Gravity</h3>
+        <div class="divider"></div>
+        <section title="atmosphere">
+            <form action="">
+                <label for="acceleration">Acceleration:</label>
+                <input title="acceleration" step="any" type="number" placeholder="9.81">
             </form>
         </section>
         <button id="submit-config">Submit</button>
@@ -40,9 +38,9 @@
     <div class="header-container">
       <h1 id="title">Physics Sim</h1>
       <div class="attributes-container">
-        <p id="air">Air Density: <span id="air-s"></span> kg/m3</p>
-        <p id="humid">Humidity: <span id="hum-s"></span> %</p>
-        <p id="temp">Temperature: <span id="tem-s"></span> C</p>
+        <p id="atmosphere">Air Density: 0 kg/m3</p>
+        <p id="humidity">Humidity: 0 g/m3</p>
+        <p id="temperature">Degrees in C: 0 C</p>
         <div class="position">
           <p id="position-x">x: 0</p>
           <p id="position-y">y: 0</p>

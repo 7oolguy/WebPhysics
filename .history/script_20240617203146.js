@@ -50,19 +50,18 @@ function setParam() {
 // Add event listener for form submission
 document.getElementById('data-form').addEventListener('submit', (e) => {
   e.preventDefault();
-  console.log("Form submitted");
 
   const humidityInput = e.target.querySelector('#humid-in').value;
   const temperatureInput = e.target.querySelector('#temp-in').value;
   const gravityInput = e.target.querySelector('#grav-in').value;
+
+  const data = readData('data') || {};
 
   console.log("Form input values:", {
     humidityInput,
     temperatureInput,
     gravityInput
   });
-
-  const data = readData('data') || {};
 
   // Handle input values and fallback to previous data or defaults
   const humidity = humidityInput ? parseFloat(humidityInput) : data.humidity || 60;
@@ -81,10 +80,9 @@ document.getElementById('data-form').addEventListener('submit', (e) => {
 });
 
 // Add event listener for button click to submit form
-document.getElementById('submit-config').addEventListener('click', (e) => {
-  e.preventDefault(); // Prevent default button behavior
-  document.getElementById('data-form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-  console.log("Submitted via button click");
+document.getElementById('submit-config').addEventListener('click', () => {
+  document.getElementById('data-form').submit();
+  console.log("Submitted");
 });
 
 // Open and move configuration tab
