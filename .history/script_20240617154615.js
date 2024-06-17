@@ -54,9 +54,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   makeTabDraggable();
 })
-
-//Canvas Functions
-const canvas = document.getElementById('simCanvas');
-const context = canvas.getContext('2d');
-
-let objects = [];

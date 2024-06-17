@@ -1,7 +1,7 @@
 
 
 //Open and Move Configuration TAB
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
   const openBtn = document.getElementById("config");
   const closeBtn = document.getElementById("closeBtn");
 
@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabHeader = document.getElementById("tabHeader");
 
     tabHeader.addEventListener("mousedown", (e) => {
-      const shiftX = e.clientX - floatingTab.getBoundingClientRect().left;
-      const shiftY = e.clientY - floatingTab.getBoundingClientRect().top;
+      let shiftX = e.clientX - floatingTab.getBoundingClientRect().left;
+      let shiftY = e.clientY - floatingTab.getBoundingClientRect().top;
   
       function moveAt(pageX, pageY) {
         floatingTab.style.left = pageX - shiftX + 'px';
@@ -54,9 +54,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   makeTabDraggable();
 })
-
-//Canvas Functions
-const canvas = document.getElementById('simCanvas');
-const context = canvas.getContext('2d');
-
-let objects = [];
