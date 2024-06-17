@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physics Sim</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="floating-tab" id="floatingTab">
+    <div class="tab-header" id="tabHeader">
+      <h2>Configuration</h2>
+      <span class="close-btn" id="closeBtn">&times;</span>
+    </div>
+    <div class="tab-content">
+        <h3 id="atmosphere">Atmosphere</h3>
+        <div class="divider"></div>
+        <section title="atmosphere">
+            <form action="">
+                <label for="humidity">Humidity:</label>
+                <input title="humidity" step="any" type="number">
+                <label for="degrees">Degrees:</label>
+                <input title="degrees" step="any" type="number">
+            </form>
+        </section>
+        <h3 id="atmosphere">Gravity</h3>
+        <div class="divider"></div>
+        <section title="atmosphere">
+            <form action="">
+                <label for="humidity">Humidity:</label>
+                <input title="humidity" step="any" type="number">
+                <label for="degrees">Degrees:</label>
+                <input title="degrees" step="any" type="number">
+            </form>
+        </section>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="header-container">
+      <h1 id="title">Physics Sim</h1>
+      <div class="attributes-container">
+        <p id="atmosphere">Air Density: 0 kg/m3</p>
+        <p id="humidity">Humidity: 0 kPa</p>
+        <p id="temperature">Degrees in C: 0 C</p>
+        <div class="position">
+          <p id="position-x">x: 0</p>
+          <p id="position-y">y: 0</p>
+        </div>
+      </div>
+    </div>
+    <div class="canvas-container">
+      <canvas id="simCanvas"></canvas>
+    </div>
+    <div id="controls-card">
+      <button title="play" type="button" id="play" class="state">Play</button>
+      <button title="pause" type="button" id="pause" class="state">Pause</button>
+      <button title="configuration" type="button" id="config" class="state">Config</button>
+      <button title="reset" type="button" id="reset" class="state">Reset</button>
+    </div>
+  </div>
+
+  <script src="script.js" type="module"></script>
+</body>
+</html>

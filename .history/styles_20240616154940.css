@@ -1,0 +1,16 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+canvas{
+    height: 100%;
+    width: 100%;
+    border: 1px solid black;
+}
+
+.canvas-container{
+    height: 60%;
+    width: 80%;
+}
