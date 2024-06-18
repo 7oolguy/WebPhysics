@@ -225,7 +225,7 @@ Ball.prototype.update = function () {
 }
 
 const balls = [
-  new Ball(100, 10, 15, "blue", 1000, 1000, 10000, 0.2)
+  new Ball(100, 10, 5, "blue", 20, 1000, 50, 0.2)
 ];
 
 function animate() {

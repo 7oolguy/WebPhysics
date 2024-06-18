@@ -22,8 +22,7 @@ function defaultData() {
     air,
     humidity: 60,
     temperature: 25,
-    gravity: 9.81,
-    timeStep: 0.01
+    gravity: 9.81
   };
 
   setData('data', defaultData);
@@ -56,13 +55,11 @@ document.getElementById('data-form').addEventListener('submit', (e) => {
   const humidityInput = e.target.querySelector('#humid-in').value;
   const temperatureInput = e.target.querySelector('#temp-in').value;
   const gravityInput = e.target.querySelector('#grav-in').value;
-  const timeStepInput = e.target.querySelector('#time-in').value;
 
   console.log("Form input values:", {
     humidityInput,
     temperatureInput,
-    gravityInput,
-    timeStepInput
+    gravityInput
   });
 
   const data = readData('data') || {};
@@ -71,13 +68,11 @@ document.getElementById('data-form').addEventListener('submit', (e) => {
   const humidity = humidityInput ? parseFloat(humidityInput) : data.humidity || 60;
   const temperature = temperatureInput ? parseFloat(temperatureInput) : data.temperature || 25;
   const gravity = gravityInput ? parseFloat(gravityInput) : data.gravity || 9.81;
-  const timeStep = timeStepInput ? parseFloat(timeStepInput) : data.timeStep || 0.01;
 
   data.air = airDensity(temperature, humidity);
   data.humidity = humidity;
   data.temperature = temperature;
   data.gravity = gravity;
-  data.timeStep = timeStep;
 
   console.log("Updated data to be stored:", data);
 
@@ -149,37 +144,32 @@ document.addEventListener('DOMContentLoaded', () => {
   setParam(); // Initialize parameters in the UI
 });
 
-// Physics Calculations
-function gravitationalForceY(mass, g){
-  return mass * g;
-}
-function buoyantForceY(fluidDensity, volume, g){
-  return fluidDensity * volume * g;
-}
-function dragForceY(fluidDensity, velocityY, dragCoefficient, crossSectionalArea){
-  return 0.5 * fluidDensity * velocityY ** 2 * dragCoefficient * crossSectionalArea * Math.sign(velocityY);
-}
-function dragForceX(fluidDensity, velocityX, dragCoefficient, crossSectionalArea){
-  return 0.5 * fluidDensity * velocityX ** 2 * dragCoefficient * crossSectionalArea * Math.sign(velocityX);
-}
-function netForceX(dragForceX){
-  return -dragForceX;
-}
-function netForceY(gravitationalForceY, buoyantForceY, dragForceY){
-  return gravitationalForceY - buoyantForceY - dragForceY;
-}
-function accelerationX(netForceX, mass){
-  return netForceX / mass;
-}
-function accelerationY(netForceY, mass){
-  return netForceY / mass;
-}
-
 const canvas = document.getElementById('simCanvas');
 const context = canvas ? canvas.getContext('2d') : null;
 let objects = [];
 
-function Ball(x, y, radius, color, dx, dy, mass, volume){
+/*
+function drawObjects() {
+  if (!context) return;
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  objects.forEach(obj => {
+    context.fillStyle = obj.color;
+    context.beginPath();
+    context.arc(obj.x, obj.y, obj.radius, 0, Math.PI * 2);
+    context.fill();
+  });
+}
+
+function addObject(x, y, radius, color) {
+  objects.push({ x, y, radius, color });
+  drawObjects();
+}
+*/
+
+function Ball(x, y, radius, color, dx, dy, mass, volume, crossSectionalArea, dragCoefficient){
+  const air = JSON.parse(readData('data'));
+  let airD = air.air;
   this.x = x;
   this.y = y;
   this.radius = radius;
@@ -188,54 +178,16 @@ function Ball(x, y, radius, color, dx, dy, mass, volume){
   this.dy = dy;
   this.mass = mass;
   this.volume = volume;
-  this.crossSectionalArea = (Math.PI * (radius * 2) ** 2) / 4;
+  this.crossSectionalArea = (Math.PI*(r*2)**2)/4;
   this.dragCoefficient = 0.47;
 }
 
-Ball.prototype.draw = function () {
-  context.beginPath();
-  context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-  context.fillStyle = this.color;
-  context.fill();
-  context.closePath();
-}
-
-Ball.prototype.update = function () {
-  const data = readData('data');
-
-  const netFx = netForceX(dragForceX(data.air, this.dx, this.dragCoefficient, this.crossSectionalArea));
-  const netFy = netForceY(
-    gravitationalForceY(this.mass, data.gravity),
-    buoyantForceY(data.air, this.volume, data.gravity),
-    dragForceY(data.air, this.dy, this.dragCoefficient, this.crossSectionalArea)
-  );
-
-  this.dx += accelerationX(netFx, this.mass) * data.timeStep;
-  this.dy += accelerationY(netFy, this.mass) * data.timeStep;
-
-  this.x += this.dx * data.timeStep;
-  this.y += this.dy * data.timeStep;
-
-  if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
-    this.dx = -this.dx;
-  }
-  if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
-    this.dy = -this.dy;
-  }
-}
-
-const balls = [
-  new Ball(100, 10, 15, "blue", 1000, 1000, 10000, 0.2)
-];
-
 function animate() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  balls.forEach(ball => {
-    ball.draw();
-    ball.update();
-  });
+  context.clearRect(0, 0, canvas.clientWidth, canvas.height);
+  draw();
+  
+
 
   requestAnimationFrame(animate);
-}
 
-animate();
+}
